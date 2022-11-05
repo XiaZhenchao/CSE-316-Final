@@ -64,8 +64,17 @@ deletePlaylist = async (req, res) => {
                 if (user._id == req.userId) {
                     console.log("correct user!");
                     Playlist.findOneAndDelete({ _id: req.params.id }, () => {
-                        return res.status(200).json({});
-                    }).catch(err => console.log(err))
+                        return res.status(200).json({
+                            success: true,
+                            message: "Playlist removed"
+                        });
+                    }).catch(err => {
+                        console.log(err)
+                        return res.status(400).json({
+                            error,
+                            message: "Playlist failed to remove"
+                        })
+                    })
                 }
                 else {
                     console.log("incorrect user!");
