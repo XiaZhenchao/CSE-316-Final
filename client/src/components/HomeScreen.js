@@ -14,7 +14,6 @@ import Typography from '@mui/material/Typography'
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
-
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);

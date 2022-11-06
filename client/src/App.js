@@ -7,10 +7,12 @@ import {
     AppBanner,
     HomeWrapper,
     LoginScreen,
+    MUIDeleteModal,
     RegisterScreen,
     Statusbar,
-    WorkspaceScreen
+    WorkspaceScreen,
 } from './components'
+import MUIErrorMessageModal from './components/MUIErrorMessageModal';
 /*
     This is our application's top-level component.
     
@@ -35,6 +37,7 @@ const App = () => {
                         <Route path="/playlist/:id" exact component={WorkspaceScreen} />
                     </Switch>
                     <Statusbar />
+                    <MUIErrorMessageModal/>
                 </GlobalStoreContextProvider>
             </AuthContextProvider>
         </BrowserRouter>

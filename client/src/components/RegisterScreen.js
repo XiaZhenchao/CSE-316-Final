@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import AuthContext from '../auth'
 import Copyright from './Copyright'
+import MUIErrorMessageModal from './MUIErrorMessageModal';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -30,6 +31,7 @@ export default function RegisterScreen() {
 
     return (
             <Container component="main" maxWidth="xs">
+                <MUIErrorMessageModal/>
                 <CssBaseline />
                 <Box
                     sx={{
