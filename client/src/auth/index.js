@@ -126,8 +126,6 @@ function AuthContextProvider(props) {
                 errorMessage: errorMessage,
               },
             });
-            console.log("errorFlag: "+ auth.error.errorFlag)
-            console.log("errorMessage: "+ auth.error.errorMessage)
         }
     }
 
@@ -145,7 +143,14 @@ function AuthContextProvider(props) {
             }
        }catch(error){
         console.log("loginUser ERROR")
-        auth.SetError(error.response.data.errorMessage);
+        let errorMessage = error.response.data.errorMessage;
+            authReducer({
+              type: AuthActionType.ERROR,
+              payload: {
+                errorFlag: true,
+                errorMessage: errorMessage,
+              },
+            });
         }
     }
 
