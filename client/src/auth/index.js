@@ -18,7 +18,7 @@ function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
         loggedIn: false,
-        error: { errorFlag: false, errorMessage: "" },
+        error: { errorFlag: false, errorMessage: "",errorType:"" },
     });
     const history = useHistory();
 
@@ -36,6 +36,7 @@ function AuthContextProvider(props) {
                     error: {
                         errorFlag: false,
                         errorMessage: null,
+                        errorType:null,
                       },
                 });
             }
@@ -46,6 +47,7 @@ function AuthContextProvider(props) {
                     error: {
                         errorFlag: false,
                         errorMessage: null,
+                        errorType:null,
                       },
                 })
             }
@@ -56,6 +58,7 @@ function AuthContextProvider(props) {
                     error: {
                         errorFlag: false,
                         errorMessage: null,
+                        errorType:null,
                       },
                 })
             }
@@ -66,6 +69,7 @@ function AuthContextProvider(props) {
                     error: {
                         errorFlag: false,
                         errorMessage: null,
+                        errorType:null,
                       },
                   });
             }
@@ -74,8 +78,9 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     error: {
-                        errorFlag: payload.is_error,
+                        errorFlag: payload.errorFlag,
                         errorMessage: payload.errorMessage,
+                        errorType: payload.errorType,
                       },
                 })
             }
@@ -124,6 +129,7 @@ function AuthContextProvider(props) {
               payload: {
                 errorFlag: true,
                 errorMessage: errorMessage,
+                errorType: "register",
               },
             });
         }
@@ -149,6 +155,7 @@ function AuthContextProvider(props) {
               payload: {
                 errorFlag: true,
                 errorMessage: errorMessage,
+                errorType: "login",
               },
             });
         }
@@ -183,6 +190,14 @@ function AuthContextProvider(props) {
                 errorMessage: null,
               },
         })
+        if(auth.error.errorType == "register")
+        {
+            console.log("Register error")
+        }
+        if(auth.error.errorType == "login")
+        {
+            console.log("login error")
+        }
         
     }
 
