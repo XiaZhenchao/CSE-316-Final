@@ -33,24 +33,29 @@ const HomeScreen = () => {
     }
     
     function handleCommentViewButton(){
-        console.log("Comment")
+       
+       store.YoutubeStateComment()
+       console.log("Comment")
     }
     function handleYoutuplayerViewButton(){
-        console.log("YouTube player")
+        store.YoutubeStatePlayer();
     }
 
     let value = 0;
     let listCard = "";
     if (store) {
         listCard = 
-            <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
+            <List sx={{ width: '90%', left: '5%', bgcolor: '#6495ED' }}>
             {
                 store.idNamePairs.map((pair) => (
-                    <ListCard
+                   <div>
+                     <ListCard
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
                     />
+                   </div>
+                    
                 ))
             }
             </List>;
@@ -69,15 +74,13 @@ const HomeScreen = () => {
                 <Typography variant="h2">Your Lists</Typography> */}
             </div>
              <div style={{fontSize: '30pt'}}>
-                <HomeIcon style={{fontSize: '48pt'}}/>
-                <PersonIcon style={{fontSize: '48pt'}}/>
-                <GroupsIcon style={{fontSize: '48pt'}}/>
+                <HomeIcon style={{fontSize: '45pt'}}/>
+                <PersonIcon style={{fontSize: '45pt'}}/>
+                <GroupsIcon style={{fontSize: '45pt'}}/>
                 <TextField id="filled-basic" label="Search" variant="filled" style={{left:'10%',width:'800px', backgroundColor:'#FFFFFF'}}/>
                 <span style={{marginLeft: '20%',fontSize:'40pt'}}>SORT BY</span>
-                <SortIcon style={{fontSize: '48pt',right:'40%'}}/>
+                <SortIcon style={{fontSize: '45pt',right:'40%'}}/>
             </div>
-
-
 
                 <Grid container spacing={0} >
                     <Grid item xs={7} >
@@ -90,15 +93,6 @@ const HomeScreen = () => {
                     </Grid>
 
                     <Grid item xs={5} >
-                    {/* <div>
-                            <YouTubePlayerExample />
-                    </div> */}
-                    {/* <Tabs textColor='primary' value={value}>
-                        <Tab label = "Player">
-                            <YouTubePlayer />
-                        </Tab>
-                        <Tab label="Comment"/>
-                    </Tabs> */}
                    <div>
                     <button style={{fontSize: '30px', width:'150px',backgroundColor:'#A9A9A9'}} onClick ={handleYoutuplayerViewButton}>
                             Player

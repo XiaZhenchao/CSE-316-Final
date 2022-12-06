@@ -1,11 +1,22 @@
 import React from 'react';
 import YouTube from 'react-youtube';
+import { useContext, useState } from 'react';
+import AuthContext from '../auth';
+import { GlobalStoreContext } from '../store'
+import { IconButton } from '@mui/material';
+import PlayMusicIcon from '@mui/icons-material/PlayArrowRounded';
+import FastRewindRoundedIcon from '@mui/icons-material/FastRewindRounded';
+import StopRoundedIcon from '@mui/icons-material/StopRounded';
+import FastForwardRoundedIcon from '@mui/icons-material/FastForwardRounded';
+
 
 export default function YouTubePlayer() {
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
     // DEMONSTRATES HOW TO IMPLEMENT A PLAYLIST THAT MOVES
     // FROM ONE SONG TO THE NEXT
+    const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [
@@ -39,10 +50,40 @@ export default function YouTubePlayer() {
         currentSong++;
         currentSong = currentSong % playlist.length;
     }
+    
+    function decSong(){
+       if(currentSong!=0)
+       {
+        currentSong--;
+        currentSong = currentSong % playlist.length;
+       }
+    }
 
+    let player;
     function onPlayerReady(event) {
+        player = event.target;
         loadAndPlayCurrentSong(event.target);
-        event.target.playVideo();
+        player.playVideo();
+    }
+
+    function handlePlayMusic() {
+        player.playVideo();
+    }
+
+    function handlePauseMusic(){
+        player.pauseVideo();
+    }
+
+    function handlePlayPreviousMusic(){
+        console.log("Play Previous Song")
+        decSong();
+        loadAndPlayCurrentSong(player)
+    }
+
+    function handlePlayNextSong() {
+        console.log("Play next Song")
+        incSong();
+        loadAndPlayCurrentSong(player)
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -75,9 +116,73 @@ export default function YouTubePlayer() {
         }
     }
 
-    return <YouTube
-        videoId={playlist[currentSong]}
-        opts={playerOptions}
-        onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange} />;
+    if(store.youtubeState == "Player")
+    {
+        console.log("state: "+ store.youtubeState)
+
+         return <div>
+            <YouTube
+                videoId={playlist[currentSong]}
+                opts={playerOptions}
+                onReady={onPlayerReady}
+                onStateChange={onPlayerStateChange} />
+                <div style={{backgroundColor:'#E6E6FA',position:'fixed',width:'31%'}}>
+                    <div style={{fontSize:'30px',textAlign:'center'}}>
+                        Now Playing
+                    </div>
+
+                    <div style={{fontSize:'30px',marginTop:"5%"}}>
+                        <div>
+                            Playlist: Pink Floyd Roadtrip
+                        </div>
+                        <div>
+                           Song #: 2
+                        </div>
+                        <div>
+                           Title:  Set The Controls For The Heart Of The Sun 
+                        </div>
+                        <div>
+                            Artist: Pink Floyd
+                        </div>
+                        <div style={{backgroundColor:'white', borderRadius:'25px'}} >
+                            <IconButton style={{marginLeft:'35%'}} onClick = {handlePlayPreviousMusic}>
+                                <FastRewindRoundedIcon style={{fontSize:'35pt'}}/>
+                            </IconButton>
+
+                            <IconButton onClick={handlePauseMusic}>
+                                <StopRoundedIcon style={{fontSize:'35pt'}}/>
+                            </IconButton>
+                            
+                            <IconButton onClick={handlePlayMusic}>
+                                <PlayMusicIcon style={{fontSize:'35pt'}}/>
+                            </IconButton>
+
+                            <IconButton onClick={handlePlayNextSong}>
+                                <FastForwardRoundedIcon style={{fontSize:'35pt'}}/>
+                            </IconButton>
+                  </div>
+
+                    </div>
+                
+                </div>
+           
+         </div>;
+    }
+    else{
+        console.log("state: "+ store.youtubeState)
+        return (
+                <div>
+                    this is a Comment
+                </div>
+        )
+    }
+
+
+    
+
+    // return <YouTube
+    //     videoId={playlist[currentSong]}
+    //     opts={playerOptions}
+    //     onReady={onPlayerReady}
+    //     onStateChange={onPlayerStateChange} />;
 }
