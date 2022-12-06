@@ -55,7 +55,6 @@ const HomeScreen = () => {
                         selected={false}
                     />
                    </div>
-                    
                 ))
             }
             </List>;

@@ -32,7 +32,7 @@ export const GlobalStoreActionType = {
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
-    YOUTUBE_STATE: "YOUTUBE_STATE"
+    YOUTUBE_STATE: "YOUTUBE_STATE",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -59,7 +59,7 @@ function GlobalStoreContextProvider(props) {
         listNameActive: false,
         listIdMarkedForDeletion: null,
         listMarkedForDeletion: null,
-        youtubeState: "Player"
+        youtubeState: "Player",
     });
     const history = useHistory();
 
@@ -236,6 +236,21 @@ function GlobalStoreContextProvider(props) {
                     youtubeState: payload
                 });
             }
+            case GlobalStoreActionType.YOUTUBEVIDEO_COUNTER:{
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    youtubeState: store.youtubeState
+                });
+            }
+            
             default:
                 return store;
         }
@@ -277,6 +292,8 @@ function GlobalStoreContextProvider(props) {
         }
         asyncChangeListName(id);
     }
+
+
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
@@ -400,7 +417,6 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.YoutubeStatePlayer = () =>{
-        console.log("player3")
         storeReducer({
             type: GlobalStoreActionType.YOUTUBE_STATE,
             payload: "Player"

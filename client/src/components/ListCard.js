@@ -10,7 +10,11 @@ import Grid from '@mui/material/Grid';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import WorkspaceScreen from './WorkspaceScreen';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import RedoIcon from '@mui/icons-material/Redo';
+import UndoIcon from '@mui/icons-material/Undo';
+import CloseIcon from '@mui/icons-material/HighlightOff';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -27,6 +31,31 @@ function ListCard(props) {
 
     let isExpend = false;
     let cardElement;
+
+    function handleAddNewSong() {
+        store.addNewSong();
+    }
+    function handleUndo() {
+        store.undo();
+    }
+    function handleRedo() {
+        store.redo();
+    }
+    function handleClose() {
+        store.closeCurrentList();
+    }
+    function handlePublish(){
+        console.log("handle publish")
+    }
+
+    function handledDelete(){
+        console.log("handle delete")
+    }
+
+    function handleDuplicate()
+    {
+        console.log("handle duplicate")
+    }
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -77,6 +106,8 @@ function ListCard(props) {
         isExpend = true
 
     }
+
+    
     function handleExpendLess(){
         store.closeCurrentList()
     }
@@ -89,6 +120,21 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+    function handleDoubleClick(event) {
+        let newActive = !editActive;
+        if (newActive) {
+            store.setIsListNameEditActive();
+        }
+        setEditActive(newActive);
+    }
+
+    function handleClick(event,id){
+        console.log("handleClick")
+        console.log("id: "+ id)
+        store.setCurrentList(id)
+        let length = store.getPlaylistSize()
+        console.log("SongLength: "+ length)
+    }
 
     if(store.currentList == null){
         console.log("currentlist test")
@@ -98,7 +144,9 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button
+            button onDoubleClick = {handleDoubleClick} onClick={(event) => {
+                handleLoadList(event, idNamePair._id)
+            }}  
         >
             <Grid container>
                 <Grid xs ={5}>
@@ -124,22 +172,32 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button >
+            button>
             <Grid container>
-                <Grid xs ={5}>
+                <Grid xs ={8}>
                     <div>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By:   Zhenchao Xia"}</Box>
                     <Box style={{width:'700px'}}>{<WorkspaceScreen/>}</Box>
                     <div>
                             <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',
-                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'lightgray'}}>{"Undo"}</Button>
-                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',marginLeft:'10px',
-                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'lightgray'}}>{"Redo"}</Button>
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
+                            onClick={handleUndo}>{"Undo"}</Button>
+                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'2%',
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
+                            onClick={handleRedo}>{"Redo"}</Button>
                             <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'40%',
-                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'lightgray'}}>{"Redo"}</Button>
-                         
-                          
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
+                            onClick={handlePublish}>{"Publish"}</Button>
+                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'42%',
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
+                            onClick={(event) => {
+                                handleDeleteList(event, idNamePair._id)
+                            }}>{"Delete"}</Button>
+                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'44%',
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
+                            onClick={handleDuplicate}>{"Duplicate"}</Button>
+
                     </div>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: Jan5, 2019 "}</Box>
                     </div>
@@ -160,7 +218,7 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button>
+            button onDoubleClick = {handleDoubleClick}>
             <Grid container>
                 <Grid xs ={5}>
                     <div>
@@ -179,28 +237,28 @@ function ListCard(props) {
         </ListItem>
     }
 
-    // if (editActive) {
-    //     cardElement =
-    //             <TextField
-    //                 margin="normal"
-    //                 required
-    //                 fullWidth
-    //                 id={"list-" + idNamePair._id}
-    //                 label="Playlist Name"
-    //                 name="name"
-    //                 autoComplete="Playlist Name"
-    //                 className='list-card'
-    //                 // onKeyPress={handleKeyPress}
-    //                 // onChange={handleUpdateText}
-    //                 defaultValue={idNamePair.name}
-    //                 inputProps={{style: {fontSize: 48}}}
-    //                 InputLabelProps={{style: {fontSize: 24}}}
-    //                 autoFocus
-    //             >
-    //             </TextField>
+    if (editActive) {
+        cardElement =
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id={"list-" + idNamePair._id}
+                    label="Playlist Name"
+                    name="name"
+                    autoComplete="Playlist Name"
+                    className='list-card'
+                    onKeyPress={handleKeyPress}
+                    onChange={handleUpdateText}
+                    defaultValue={idNamePair.name}
+                    inputProps={{style: {fontSize: 48}}}
+                    InputLabelProps={{style: {fontSize: 24}}}
+                    autoFocus
+                >
+                </TextField>
 
 
-    //}
+    }
     return (
         cardElement
 

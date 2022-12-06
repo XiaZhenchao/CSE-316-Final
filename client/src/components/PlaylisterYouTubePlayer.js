@@ -3,7 +3,7 @@ import YouTube from 'react-youtube';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
-import { IconButton } from '@mui/material';
+import { IconButton, typographyClasses } from '@mui/material';
 import PlayMusicIcon from '@mui/icons-material/PlayArrowRounded';
 import FastRewindRoundedIcon from '@mui/icons-material/FastRewindRounded';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
@@ -17,17 +17,41 @@ export default function YouTubePlayer() {
     // FROM ONE SONG TO THE NEXT
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
+    const [currentSongIndex, setCurrentSongIndex] = useState(0);
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [
-        "cPWBG6_jn4Y",
-        "V8RkqQ8fQs4",
-        "z2vaSlpliEs"
+        // "cPWBG6_jn4Y",
+        // "V8RkqQ8fQs4",
+        // "z2vaSlpliEs"
     ];
+    let player;
+    let playlistName
+    let SongTitle = []
+    let SongArtist = []
+    let song
+    let isChanged =false
+    if(store.currentList != null)
+    {
+        let length = store.getPlaylistSize()
+        for(let i=0; i< length;i++)
+        {
+            playlist[i]= store.currentList.songs[i].youTubeId
+            SongTitle[i] = store.currentList.songs[i].title
+            SongArtist[i] = store.currentList.songs[i].artist
+            // console.log("test: "+ store.currentList.songs[i].youTubeId)
+        }
+        playlistName = store.currentList.name
+    }
+    // for(let i =0; i< playlist.length;i++)
+    // {
+    //     console.log("content: "+playlist[i])
+    // }
+    
+    
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let currentSong = 0;
-
     const playerOptions = {
         height: '390',
         width: '640',
@@ -40,30 +64,35 @@ export default function YouTubePlayer() {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = playlist[currentSong];
+        song = playlist[currentSong];
         player.loadVideoById(song);
         player.playVideo();
+        isChanged = true
     }
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
-        currentSong++;
-        currentSong = currentSong % playlist.length;
+            let index = (currentSongIndex+1) % playlist.length;
+            setCurrentSongIndex(index);
     }
     
     function decSong(){
-       if(currentSong!=0)
+       
        {
-        currentSong--;
-        currentSong = currentSong % playlist.length;
+        let index = (currentSongIndex-1) % playlist.length;
+        if (index < 0) return;
+        setCurrentSongIndex(index);
+        // currentSong--;
+        // currentSong = currentSong % playlist.length;
        }
     }
 
-    let player;
+
     function onPlayerReady(event) {
         player = event.target;
         loadAndPlayCurrentSong(event.target);
         player.playVideo();
+      
     }
 
     function handlePlayMusic() {
@@ -83,7 +112,7 @@ export default function YouTubePlayer() {
     function handlePlayNextSong() {
         console.log("Play next Song")
         incSong();
-        loadAndPlayCurrentSong(player)
+        loadAndPlayCurrentSong(player)     
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -119,13 +148,15 @@ export default function YouTubePlayer() {
     if(store.youtubeState == "Player")
     {
         console.log("state: "+ store.youtubeState)
-
-         return <div>
+        if(store.currentList == null)
+        {
+            return <div>
             <YouTube
-                videoId={playlist[currentSong]}
+                videoId={playlist[currentSongIndex]}
                 opts={playerOptions}
                 onReady={onPlayerReady}
                 onStateChange={onPlayerStateChange} />
+
                 <div style={{backgroundColor:'#E6E6FA',position:'fixed',width:'31%'}}>
                     <div style={{fontSize:'30px',textAlign:'center'}}>
                         Now Playing
@@ -133,16 +164,16 @@ export default function YouTubePlayer() {
 
                     <div style={{fontSize:'30px',marginTop:"5%"}}>
                         <div>
-                            Playlist: Pink Floyd Roadtrip
+                            Playlist: 
                         </div>
                         <div>
-                           Song #: 2
+                           Song #: {store.youtubeCounter}
                         </div>
                         <div>
-                           Title:  Set The Controls For The Heart Of The Sun 
+                           Title:  
                         </div>
                         <div>
-                            Artist: Pink Floyd
+                            Artist: 
                         </div>
                         <div style={{backgroundColor:'white', borderRadius:'25px'}} >
                             <IconButton style={{marginLeft:'35%'}} onClick = {handlePlayPreviousMusic}>
@@ -167,6 +198,58 @@ export default function YouTubePlayer() {
                 </div>
            
          </div>;
+        }else{
+
+                return <div>
+            <YouTube
+                videoId={playlist[currentSongIndex]}
+                opts={playerOptions}
+                onReady={onPlayerReady}
+                onStateChange={onPlayerStateChange} />
+                <div style={{backgroundColor:'#E6E6FA',position:'fixed',width:'31%'}}>
+                    <div style={{fontSize:'30px',textAlign:'center'}}>
+                        Now Playing
+                    </div>
+
+                    <div style={{fontSize:'30px',marginTop:"5%"}}>
+                        <div>
+                            Playlist: {playlistName}
+                        </div>
+                        <div>
+                           Song #: {currentSongIndex+1}
+                        </div>
+                        <div>
+                           Title:  {store.currentList.songs[currentSong].title}
+                        </div>
+                        <div>
+                            Artist: {store.currentList.songs[currentSong].artist}
+                        </div>
+                        <div style={{backgroundColor:'white', borderRadius:'25px'}} >
+                            <IconButton style={{marginLeft:'35%'}} onClick = {handlePlayPreviousMusic}>
+                                <FastRewindRoundedIcon style={{fontSize:'35pt'}} />
+                            </IconButton>
+
+                            <IconButton onClick={handlePauseMusic}>
+                                <StopRoundedIcon style={{fontSize:'35pt'}}/>
+                            </IconButton>
+                            
+                            <IconButton onClick={handlePlayMusic}>
+                                <PlayMusicIcon style={{fontSize:'35pt'}}/>
+                            </IconButton>
+
+                            <IconButton onClick={handlePlayNextSong}>
+                                <FastForwardRoundedIcon style={{fontSize:'35pt'}}/>
+                            </IconButton>
+                  </div>
+
+                    </div>
+                
+                </div>
+           
+         </div>;
+            
+        }
+        
     }
     else{
         console.log("state: "+ store.youtubeState)
