@@ -6,6 +6,7 @@ import MUIRemoveSongModal from './MUIRemoveSongModal'
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import { GlobalStoreContext } from '../store/index.js'
+import AddIcon from '@mui/icons-material/Add';
 /*
     This React component lets us edit a loaded list, which only
     happens when we are on the proper route.
@@ -15,6 +16,10 @@ import { GlobalStoreContext } from '../store/index.js'
 function WorkspaceScreen() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
+
+    function handleAddNewSong() {
+        store.addNewSong();
+    }
     
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
@@ -37,9 +42,13 @@ function WorkspaceScreen() {
                         index={index}
                         song={song}
                     />
-                ))  
+                )) 
             }
-         </List>            
+            <List id= "playlist-cards-add" style={{border:'1px solid black',borderRadius:'20px',left:'1%',width:'97%',backgroundColor:'#e1e4cb'}} >
+                {<AddIcon style={{marginLeft:'50%'}} onClick={handleAddNewSong} >
+                </AddIcon>}
+            </List>
+         </List>           
          { modalJSX }
          </Box>
     )

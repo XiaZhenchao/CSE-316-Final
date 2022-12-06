@@ -9,10 +9,8 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import WorkspaceScreen from './WorkspaceScreen';
+import { Button } from '@mui/material';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -120,7 +118,6 @@ function ListCard(props) {
         </ListItem>
     } 
     else if(store.currentList._id === idNamePair._id){
-
         cardElement =
         <ListItem
             id={idNamePair._id}
@@ -133,9 +130,17 @@ function ListCard(props) {
                     <div>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By:   Zhenchao Xia"}</Box>
-                    {/* <Box id = "Expend-list-Card" style={{fontSize:'20px',marginTop:'3%',padding:'5px',
-                    border:'5px solid black',borderRadius:'10px',color:'white',width:'500px'}}>{"1.Fast train by Solomon Burke"}</Box> */}
-                    <Box>{<WorkspaceScreen/>}</Box>
+                    <Box style={{width:'700px'}}>{<WorkspaceScreen/>}</Box>
+                    <div>
+                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'lightgray'}}>{"Undo"}</Button>
+                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',marginLeft:'10px',
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'lightgray'}}>{"Redo"}</Button>
+                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'40%',
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'lightgray'}}>{"Redo"}</Button>
+                         
+                          
+                    </div>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: Jan5, 2019 "}</Box>
                     </div>
                 </Grid>
@@ -146,7 +151,6 @@ function ListCard(props) {
                 </IconButton>
             </Box>
         </ListItem>
-        console.log("done")
     }
     else{
         console.log("handle final stage")

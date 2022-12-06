@@ -29,7 +29,7 @@ function EditToolbar() {
     }
     return (
         <div id="edit-toolbar">
-            <Button
+            {/* <Button
                 disabled={!store.canAddNewSong()}
                 id='add-song-button'
                 onClick={handleAddNewSong}
@@ -56,7 +56,7 @@ function EditToolbar() {
                 onClick={handleClose}
                 variant="contained">
                     <CloseIcon />
-            </Button>
+            </Button> */}
         </div>
     )
 }
