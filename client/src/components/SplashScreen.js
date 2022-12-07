@@ -20,7 +20,7 @@ export default function SplashScreen() {
     return (
         <div id="splash-screen">
             <div style={{fontSize:80,textAlign:"center",marginBottom:'10%'}}>
-                Weclome to Playlister
+                Welcome to Playlister
             </div>
             <div>
                 <div style={{fontSize:40,textAlign:'center'}} id = "splash-bottom">

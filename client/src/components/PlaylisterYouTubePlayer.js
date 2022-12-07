@@ -30,7 +30,6 @@ export default function YouTubePlayer() {
     let SongTitle = []
     let SongArtist = []
     let song
-    let isChanged =false
     if(store.currentList != null)
     {
         let length = store.getPlaylistSize()
@@ -67,7 +66,6 @@ export default function YouTubePlayer() {
         song = playlist[currentSong];
         player.loadVideoById(song);
         player.playVideo();
-        isChanged = true
     }
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
@@ -77,13 +75,11 @@ export default function YouTubePlayer() {
     }
     
     function decSong(){
-       
        {
+
         let index = (currentSongIndex-1) % playlist.length;
         if (index < 0) return;
         setCurrentSongIndex(index);
-        // currentSong--;
-        // currentSong = currentSong % playlist.length;
        }
     }
 
@@ -161,13 +157,12 @@ export default function YouTubePlayer() {
                     <div style={{fontSize:'30px',textAlign:'center'}}>
                         Now Playing
                     </div>
-
                     <div style={{fontSize:'30px',marginTop:"5%"}}>
                         <div>
                             Playlist: 
                         </div>
                         <div>
-                           Song #: {store.youtubeCounter}
+                           Song #: 
                         </div>
                         <div>
                            Title:  
@@ -199,7 +194,6 @@ export default function YouTubePlayer() {
            
          </div>;
         }else{
-
                 return <div>
             <YouTube
                 videoId={playlist[currentSongIndex]}
@@ -219,10 +213,10 @@ export default function YouTubePlayer() {
                            Song #: {currentSongIndex+1}
                         </div>
                         <div>
-                           Title:  {store.currentList.songs[currentSong].title}
+                           Title:  {SongTitle[currentSongIndex]}
                         </div>
                         <div>
-                            Artist: {store.currentList.songs[currentSong].artist}
+                            Artist: {SongArtist[currentSongIndex]}
                         </div>
                         <div style={{backgroundColor:'white', borderRadius:'25px'}} >
                             <IconButton style={{marginLeft:'35%'}} onClick = {handlePlayPreviousMusic}>

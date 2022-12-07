@@ -15,7 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import CloseIcon from '@mui/icons-material/HighlightOff';
-
+import AuthContext from '../auth'
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -25,13 +25,12 @@ import CloseIcon from '@mui/icons-material/HighlightOff';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected } = props;
-
+    const { idNamePair, selected, publish,publishDate } = props;
     let isExpend = false;
     let cardElement;
-
     function handleAddNewSong() {
         store.addNewSong();
     }
@@ -44,8 +43,9 @@ function ListCard(props) {
     function handleClose() {
         store.closeCurrentList();
     }
-    function handlePublish(){
+    function handlePublish(event){
         console.log("handle publish")
+        store.setPublish(idNamePair._id)
     }
 
     function handledDelete(){
@@ -104,7 +104,6 @@ function ListCard(props) {
     function handleExpendMore(){
         console.log("Expend More!")
         isExpend = true
-
     }
 
     
@@ -137,7 +136,8 @@ function ListCard(props) {
     }
 
     if(store.currentList == null){
-        console.log("currentlist test")
+       if(typeof idNamePair.publishDate === 'undefined')
+       {
         cardElement =
         <ListItem
             id={idNamePair._id}
@@ -152,8 +152,7 @@ function ListCard(props) {
                 <Grid xs ={5}>
                     <div>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By:   Zhenchao Xia"}</Box>
-                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: Jan5, 2019 "+isExpend}</Box>
+                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box>
                     </div>
                 </Grid>
             </Grid>
@@ -164,9 +163,39 @@ function ListCard(props) {
                 </IconButton>
             </Box>
         </ListItem>
+       }else{
+        cardElement =
+        <ListItem
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
+            style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
+            button onDoubleClick = {handleDoubleClick} onClick={(event) => {
+                handleLoadList(event, idNamePair._id)
+            }}  
+        >
+            <Grid container>
+                <Grid xs ={5}>
+                    <div>
+                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box>
+                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: "+ (idNamePair.publishDate).slice(0,10)}</Box>
+                    </div>
+                </Grid>
+            </Grid>
+            <Box sx={{ p: 1 }}>
+                <IconButton onClick={handleExpendMore} >
+                    <ExpandMoreIcon style={{fontSize:'48pt'}}   
+                    onClick={(event) => { handleLoadList(event, idNamePair._id)}}/>
+                </IconButton>
+            </Box>
+        </ListItem>
+       }
     } 
     else if(store.currentList._id === idNamePair._id){
-        cardElement =
+        if(typeof store.currentList.publishDate === 'undefined')
+        {
+            cardElement =
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
@@ -177,7 +206,7 @@ function ListCard(props) {
                 <Grid xs ={8}>
                     <div>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By:   Zhenchao Xia"}</Box>
+                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box>
                     <Box style={{width:'700px'}}>{<WorkspaceScreen/>}</Box>
                     <div>
                             <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',
@@ -188,7 +217,9 @@ function ListCard(props) {
                             onClick={handleRedo}>{"Redo"}</Button>
                             <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'40%',
                             border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
-                            onClick={handlePublish}>{"Publish"}</Button>
+                            onClick={(event) => {
+                                handlePublish(event)
+                            }}>{"Publish"}</Button>
                             <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'42%',
                             border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
                             onClick={(event) => {
@@ -199,7 +230,6 @@ function ListCard(props) {
                             onClick={handleDuplicate}>{"Duplicate"}</Button>
 
                     </div>
-                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: Jan5, 2019 "}</Box>
                     </div>
                 </Grid>
             </Grid>
@@ -209,6 +239,43 @@ function ListCard(props) {
                 </IconButton>
             </Box>
         </ListItem>
+        }
+        else{
+            cardElement =
+        <ListItem
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
+            style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
+            button>
+            <Grid container>
+                <Grid xs ={8}>
+                    <div>
+                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box>
+                    <Box style={{width:'700px'}}>{<WorkspaceScreen/>}</Box>
+                    <div>
+                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'75%',
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
+                            onClick={(event) => {
+                                handleDeleteList(event, idNamePair._id)
+                            }}>{"Delete"}</Button>
+                            <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'80%',
+                            border:'1px solid black',borderRadius:'15px',textAlign:'center',backgroundColor:'#e1e4cb'}}
+                            onClick={handleDuplicate}>{"Duplicate"}</Button>
+
+                    </div>
+                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: "+(idNamePair.publishDate).slice(0,10)}</Box>
+                    </div>
+                </Grid>
+            </Grid>
+            <Box sx={{ p: 1 }}>
+                <IconButton onClick={handleExpendLess} >
+                    <ExpandLessIcon style={{fontSize:'48pt'}}/>
+                </IconButton>
+            </Box>
+        </ListItem>
+        }
     }
     else{
         console.log("handle final stage")
@@ -223,8 +290,8 @@ function ListCard(props) {
                 <Grid xs ={5}>
                     <div>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By:   Zhenchao Xia"}</Box>
-                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: Jan5, 2019 "+isExpend}</Box>
+                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box>
+                    <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: "+ (store.currentList.publishDate?store.currentList.publishDate.slice(0,10):null)}</Box>
                     </div>
                 </Grid>
             </Grid>

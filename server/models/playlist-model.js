@@ -10,6 +10,8 @@ const playlistSchema = new Schema(
     {
         name: { type: String, required: true },
         ownerEmail: { type: String, required: true },
+        publish:{type: Boolean, required: true},
+        publishDate:{type: Date, required: false},
         songs: { type: [{
             title: String,
             artist: String,
