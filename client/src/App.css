@@ -113,6 +113,12 @@ body {
   font-size: 40pt;
 }
 
+#CommentCards{
+  overflow: scroll;
+  background-color: #6495ED;
+  height: 60vh;
+}
+
 
 .playlister-button, .playlister-button-disabled {
   font-size:36pt;

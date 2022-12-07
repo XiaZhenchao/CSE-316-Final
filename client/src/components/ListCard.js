@@ -16,6 +16,10 @@ import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import CloseIcon from '@mui/icons-material/HighlightOff';
 import AuthContext from '../auth'
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -135,6 +139,19 @@ function ListCard(props) {
         console.log("SongLength: "+ length)
     }
 
+    function handlesetLike(event,id){
+        // event.stopPropagation();
+        console.log("handleSetLike")
+        store.setLike(id)
+    }
+
+    function handlesetDislike(event,id)
+    {
+        // event.stopPropagation();
+        console.log("handlesetDislike")
+        store.setDislike(id)
+    }
+
     if(store.currentList == null){
        if(typeof idNamePair.publishDate === 'undefined')
        {
@@ -145,8 +162,7 @@ function ListCard(props) {
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
             button onDoubleClick = {handleDoubleClick} onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }}  
+                handleLoadList(event, idNamePair._id)}}
         >
             <Grid container>
                 <Grid xs ={5}>
@@ -178,7 +194,22 @@ function ListCard(props) {
                 <Grid xs ={5}>
                     <div>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                    <div>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box>
+                    <Box>
+                        <IconButton onClick={(event) => {
+                                handlesetLike(idNamePair._id)
+                            }}>
+                            <ThumbUpOffAltIcon style={{fontSize:'40px',marginLeft:'20%'}}></ThumbUpOffAltIcon>{idNamePair.like}
+                        </IconButton>
+                        <IconButton onClick={(event) => {
+                                handlesetDislike(event,idNamePair._id)
+                            }}>
+                            <ThumbDownOffAltIcon style={{fontSize:'40px', marginLeft:'20%'}} ></ThumbDownOffAltIcon>
+                            {idNamePair.dislike}
+                        </IconButton>
+                    </Box>
+                    </div>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: "+ (idNamePair.publishDate).slice(0,10)}</Box>
                     </div>
                 </Grid>
@@ -201,7 +232,7 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button>
+            button >
             <Grid container>
                 <Grid xs ={8}>
                     <div>
@@ -247,12 +278,27 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button>
+            button onDoubleClick = {handleDoubleClick}  >
             <Grid container>
                 <Grid xs ={8}>
                     <div>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                    <div>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box>
+                    <Box>
+                        <IconButton onClick={(event) => {
+                                handlesetLike(idNamePair._id)
+                            }}>
+                            <ThumbUpOffAltIcon style={{fontSize:'40px',marginLeft:'20%'}}></ThumbUpOffAltIcon>{idNamePair.like}
+                        </IconButton>
+                        <IconButton onClick={(event) => {
+                                handlesetDislike(event,idNamePair._id)
+                            }}>
+                            <ThumbDownOffAltIcon style={{fontSize:'40px', marginLeft:'20%'}} ></ThumbDownOffAltIcon>
+                            {idNamePair.dislike}
+                        </IconButton>
+                    </Box>
+                    </div>
                     <Box style={{width:'700px'}}>{<WorkspaceScreen/>}</Box>
                     <div>
                             <Button style={{color:'black',fontWeight:'bold',fontSize:'15px',width:'100px',marginTop:'20px',left:'75%',
@@ -290,7 +336,17 @@ function ListCard(props) {
                 <Grid xs ={5}>
                     <div>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                    <div>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box>
+                    <Box>
+                    <IconButton >
+                            <ThumbUpOffAltIcon style={{fontSize:'40px',marginLeft:'20%'}}/>
+                        </IconButton>
+                        <IconButton>
+                            <ThumbDownOffAltIcon style={{fontSize:'40px', marginLeft:'20%'}}/>
+                        </IconButton>
+                    </Box>
+                    </div>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: "+ (store.currentList.publishDate?store.currentList.publishDate.slice(0,10):null)}</Box>
                     </div>
                 </Grid>

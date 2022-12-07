@@ -4,6 +4,7 @@ import { Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import { textAlign } from '@mui/system';
+import AuthContext from '../auth'
 
 /*
     Our Status bar React component goes at the bottom of our UI.
@@ -11,6 +12,7 @@ import { textAlign } from '@mui/system';
     @author McKilla Gorilla
 */
 function Statusbar() {
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     let text ="";
 
@@ -21,7 +23,7 @@ function Statusbar() {
     if (store.currentList)
         text = store.currentList.name;
    
-    if(!store.currentList)
+    if(!store.currentList && auth.loggedIn)
     {
         return (
             <div style={{fontSize:'48px',textAlign:'center'}}>

@@ -8,6 +8,9 @@ import PlayMusicIcon from '@mui/icons-material/PlayArrowRounded';
 import FastRewindRoundedIcon from '@mui/icons-material/FastRewindRounded';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
 import FastForwardRoundedIcon from '@mui/icons-material/FastForwardRounded';
+import { Box } from '@mui/system';
+import TextField from '@mui/material/TextField';
+import CommentCard from './CommentCard';
 
 
 export default function YouTubePlayer() {
@@ -59,6 +62,15 @@ export default function YouTubePlayer() {
             autoplay: 0,
         },
     };
+
+
+    function handleCommentInput(event){
+        if(event.keyCode == 13){
+            let temp = event.target.value
+            // console.log("temptest: "+ temp)
+            store.setComment(store.currentList._id,temp,auth.user.firstName+" "+auth.user.lastName)
+        }
+    }
 
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
@@ -248,9 +260,28 @@ export default function YouTubePlayer() {
     else{
         console.log("state: "+ store.youtubeState)
         return (
-                <div>
-                    this is a Comment
+               <div>
+                <div id = "CommentCards">
+                    {/* <Box style = {{border:'1px solid black',borderRadius:'15px',backgroundColor:'#e1e4cb'}}> */}
+                    {/* <Box style={{fontSize: '15px',marginTop:'3%',marginLeft:'2%'}}>{"By: "+ auth.user.firstName + auth.user.lastName }</Box> */}
+                    <Box style={{fontSize: '20px',marginTop:'3%',marginLeft:'2%',width:'60%'}}>{ store.currentList?store.currentList.comment.map((pair) => (
+                   <div>
+                     <CommentCard
+                        username={pair.username}
+                        comment={pair.comment}
+                    />
+                   </div>
+                )):null}
+                </Box>
+                    {/* </Box> */}
+                   
                 </div>
+                <Box>
+                <TextField id="filled-basic" label="Add Comment" variant="filled" style={{width:'100%', backgroundColor:'#FFFFFF',top:'1000%',borderRadius:'15px'}}
+                onKeyDown={handleCommentInput} />
+                </Box>
+               </div>
+               
         )
     }
 

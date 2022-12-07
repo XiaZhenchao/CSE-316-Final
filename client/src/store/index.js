@@ -325,6 +325,116 @@ function GlobalStoreContextProvider(props) {
         asyncSetPublish(id);
     }
 
+    store.setComment = function (id,comment,username) {
+        // GET THE LIST
+        async function asyncSetComment(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                // let pubDate = new Date();
+                // playlist.publishDate = pubDate;
+                // playlist.publish = true;
+                console.log("setcomment: variable: "+ comment)
+                let signleComment = {username,comment}
+                console.log("setcomment: signleComment: "+ signleComment)
+                playlist.comment.push(signleComment)
+                //console.log("Playlist comment is "+playlist.comment(comment))
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncSetComment(id);
+    }
+
+
+    store.setLike = function (id) {
+        // GET THE LIST
+        async function asyncSetLike(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                console.log("playlist.like0: "+ playlist.like)
+                if(playlist.like != 0 && playlist.like != null){
+                    let templike = playlist.like;
+                    playlist.like = templike + 1
+                    console.log("templike: " + templike)
+                    console.log("playlist.like: "+ playlist.like )
+                    }
+                    else{playlist.like=1
+                        console.log("playlist.like2: "+ playlist.like )
+                    }
+                    
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncSetLike(id);
+    }
+
+
+    store.setDislike = function (id) {
+        // GET THE LIST
+        async function asyncSetDislike(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                if(playlist.dislike != 0 && playlist.dislike != null){
+                    let tempdislike = playlist.dislike;
+                    playlist.dislike = tempdislike + 1
+                    }
+                    else{playlist.dislike=1}
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncSetDislike(id);
+    }
+
 
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
