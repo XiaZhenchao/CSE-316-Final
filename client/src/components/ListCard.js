@@ -59,6 +59,7 @@ function ListCard(props) {
     function handleDuplicate()
     {
         console.log("handle duplicate")
+        store.DuplicatePlaylist(store.currentList._id)
     }
 
     function handleLoadList(event, id) {
@@ -161,7 +162,7 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button onDoubleClick = {handleDoubleClick} onClick={(event) => {
+            button onClick={(event) => {
                 handleLoadList(event, idNamePair._id)}}
         >
             <Grid container>
@@ -173,6 +174,9 @@ function ListCard(props) {
                 </Grid>
             </Grid>
             <Box sx={{ p: 1 }}>
+                <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <EditIcon style={{fontSize:'20pt'}} />
+                        </IconButton>
                 <IconButton onClick={handleExpendMore} >
                     <ExpandMoreIcon style={{fontSize:'48pt'}}   
                     onClick={(event) => { handleLoadList(event, idNamePair._id)}}/>
@@ -186,9 +190,10 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button onDoubleClick = {handleDoubleClick} onClick={(event) => {
+            button onClick={(event) => {
                 handleLoadList(event, idNamePair._id)
             }}  
+            
         >
             <Grid container>
                 <Grid xs ={5}>
@@ -208,6 +213,10 @@ function ListCard(props) {
                             <ThumbDownOffAltIcon style={{fontSize:'40px', marginLeft:'20%'}} ></ThumbDownOffAltIcon>
                             {idNamePair.dislike}
                         </IconButton>
+                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <EditIcon style={{fontSize:'20pt'}} />
+                        </IconButton>
+                      
                     </Box>
                     </div>
                     <Box style={{fontSize: '20px',marginTop:'3%'}}>{"Published: "+ (idNamePair.publishDate).slice(0,10)}</Box>
@@ -278,7 +287,7 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button onDoubleClick = {handleDoubleClick}  >
+            button   >
             <Grid container>
                 <Grid xs ={8}>
                     <div>
@@ -331,7 +340,7 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '40pt',marginBottom: '5px',border:'5px solid black',backgroundColor:'lightyellow',borderRadius:'10px'}}
-            button onDoubleClick = {handleDoubleClick}>
+            button >
             <Grid container>
                 <Grid xs ={5}>
                     <div>

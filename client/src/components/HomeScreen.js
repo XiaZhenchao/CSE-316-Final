@@ -17,6 +17,7 @@ import Grid from '@mui/material/Grid';
 import YouTubePlayerExample from './PlaylisterYouTubePlayer';
 import { IconButton, Tab, Tabs } from '@mui/material';
 import YouTubePlayer from './PlaylisterYouTubePlayer';
+import Button from '@mui/material/Button';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -67,6 +68,10 @@ const HomeScreen = () => {
             setKeyWord(temp)
             console.log("The key word is: "+ KeyWord)
         }
+    }
+
+    function handleSort(){
+
     }
 
 
@@ -132,7 +137,7 @@ const HomeScreen = () => {
                 listCard = 
                 <List sx={{ width: '90%', left: '5%', bgcolor: '#6495ED' }}>
                 {
-                    store.idNamePairs.filter(pair => typeof pair.publishDate !== 'undefined' && pair.name == KeyWord).map((pair) => (
+                    store.idNamePairs.filter(pair => typeof pair.publishDate !== 'undefined' && pair.username == KeyWord).map((pair) => (
                        <div>
                          <ListCard
                             key={pair._id}
@@ -185,8 +190,16 @@ const HomeScreen = () => {
                 </IconButton>
                 <TextField id="filled-basic" label="Search" variant="filled" style={{left:'10%',width:'800px', backgroundColor:'#FFFFFF'}}
                 onKeyDown = {handleSearchInput}/>
-                <span style={{marginLeft: '20%',fontSize:'40pt'}}>SORT BY</span>
-                <SortIcon style={{fontSize: '45pt',right:'40%'}}/>
+                {/* <span style={{marginLeft: '20%',fontSize:'40pt'}}>SORT BY</span> */}
+                <select id = "myList" style={{marginLeft: '20%',fontSize:'20pt'}}>  
+                <option> ---SORT BY--- </option>  
+                <option> Name(A-Z) </option>  
+                <option> Publish Date(Newest) </option>  
+                <option> Listens(Hight - Low) </option>  
+                <option> Likes(High - Low) </option> 
+                <option> Dislikes(High - Low) </option>   
+                </select>  
+               
             </div>
 
                 <Grid container spacing={0} >

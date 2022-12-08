@@ -436,6 +436,35 @@ function GlobalStoreContextProvider(props) {
     }
 
 
+    store.DuplicatePlaylist =  function(id){
+        async function asyncDuplicateList() {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+              let playlist = response.data.playlist
+              let newListName = "Untitled" + store.newListCounter;
+              let username=auth.user.firstName+auth.user.lastName;
+              response = await api.createPlaylist(playlist.name, playlist.songs, playlist.ownerEmail,username);
+              if (response.status === 201) {
+                tps.clearAllTransactions();
+                let newList = playlist;
+                let result = await api.getPlaylistPairs();
+                if (result.data.success) {
+                  storeReducer({
+                      type: GlobalStoreActionType.CREATE_NEW_LIST,
+                      payload: newList
+                  }
+                  );
+                }
+                // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+                  history.push("/playlist/" + newList._id);
+                  history.push("/")
+              }
+            }
+          }
+          asyncDuplicateList(id);
+        };
+
+
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
@@ -450,7 +479,10 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        let username = auth.user.firstName+auth.user.lastName
+        console.log("username: "+ username);
+        console.log("username type: "+ typeof username)
+        const response = await api.createPlaylist(newListName, [], auth.user.email,username);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -582,6 +614,7 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
                 playlist.publish = false;
+
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if (response.data.success) {
                     storeReducer({

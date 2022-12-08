@@ -3,11 +3,12 @@ import { maxHeight } from "@mui/system";
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
-
+import HomeScreen from './HomeScreen'
 
 export default function SplashScreen() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
+    const [GuestState,setGuestState] = useState(false);
 
     const handleRegisterButton = () =>{
         window.location.href += 'register'
@@ -17,6 +18,12 @@ export default function SplashScreen() {
         window.location.href += 'login'
     }
 
+    const handleGuestButton = () =>{
+        setGuestState(true)
+    }
+
+   if(GuestState == false)
+   {
     return (
         <div id="splash-screen">
             <div style={{fontSize:80,textAlign:"center",marginBottom:'10%'}}>
@@ -36,7 +43,7 @@ export default function SplashScreen() {
                     Login
                 </Button>
 
-                <Button style={{left:'3%',fontSize:'25px',borderRadius:'10px', backgroundColor: "#FFFFFF"}}>
+                <Button style={{left:'3%',fontSize:'25px',borderRadius:'10px', backgroundColor: "#FFFFFF"}} onClick = {handleGuestButton}>
                     Continue as the Guest
                 </Button>
             </div>
@@ -45,4 +52,8 @@ export default function SplashScreen() {
             </div>
         </div>
     )
+   }else{
+        auth.loggedIn = true
+        return <HomeScreen />
+   }
 }

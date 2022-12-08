@@ -144,7 +144,8 @@ getPlaylistPairs = async (req, res) => {
                             publishDate: list.publishDate,
                             comment:list.comment,
                             like: list.like,
-                            dislike: list.dislike
+                            dislike: list.dislike,
+                            username: list.username
                         };
                         pairs.push(pair);
                     }
@@ -205,6 +206,7 @@ updatePlaylist = async (req, res) => {
                     list.comment = body.playlist.comment;
                     list.like = body.playlist.like;
                     list.dislike = body.playlist.dislike;
+                    list.username = body.playlist.username;
                     list
                         .save()
                         .then(() => {
